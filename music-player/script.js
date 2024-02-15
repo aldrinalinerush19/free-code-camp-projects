@@ -1,3 +1,4 @@
+// Define constants for DOM elements
 const playlistSongs = document.getElementById('playlist-songs');
 const playButton = document.getElementById('play');
 const pauseButton = document.getElementById('pause');
@@ -5,6 +6,7 @@ const nextButton = document.getElementById('next');
 const previousButton = document.getElementById('previous');
 const shuffleButton = document.getElementById('shuffle');
 
+// Define an array of songs
 const allSongs = [
   {
     id: 0,
@@ -78,13 +80,17 @@ const allSongs = [
   },
 ];
 
+// Create an audio object
 const audio = new Audio();
+
+// Define user data object to store songs and current state
 let userData = {
-  songs: [...allSongs],
-  currentSong: null,
-  songCurrentTime: 0,
+  songs: [...allSongs], // Copy of allSongs array
+  currentSong: null, // Currently playing song
+  songCurrentTime: 0, // Current playback time of the song
 };
 
+// Function to play a song by its ID
 const playSong = id => {
   const song = userData?.songs.find(song => song.id === id);
   audio.src = song.src;
@@ -104,6 +110,7 @@ const playSong = id => {
   audio.play();
 };
 
+// Function to pause the currently playing song
 const pauseSong = () => {
   userData.songCurrentTime = audio.currentTime;
 
@@ -111,6 +118,7 @@ const pauseSong = () => {
   audio.pause();
 };
 
+// Function to play the next song in the playlist
 const playNextSong = () => {
   if (userData?.currentSong === null) {
     playSong(userData?.songs[0].id);
@@ -122,6 +130,7 @@ const playNextSong = () => {
   }
 };
 
+// Function to play the previous song in the playlist
 const playPreviousSong = () => {
   if (userData?.currentSong === null) return;
   else {
@@ -132,6 +141,7 @@ const playPreviousSong = () => {
   }
 };
 
+// Function to shuffle the playlist
 const shuffle = () => {
   userData?.songs.sort(() => Math.random() - 0.5);
   userData.currentSong = null;
@@ -143,6 +153,7 @@ const shuffle = () => {
   setPlayButtonAccessibleText();
 };
 
+// Function to delete a song from the playlist by its ID
 const deleteSong = id => {
   if (userData?.currentSong?.id === id) {
     userData.currentSong = null;
@@ -176,6 +187,7 @@ const deleteSong = id => {
   }
 };
 
+// Function to update the display of the player with the current song information
 const setPlayerDisplay = () => {
   const playingSong = document.getElementById('player-song-title');
   const songArtist = document.getElementById('player-song-artist');
@@ -186,6 +198,7 @@ const setPlayerDisplay = () => {
   songArtist.textContent = currentArtist ? currentArtist : '';
 };
 
+// Function to highlight the currently playing song in the playlist
 const highlightCurrentSong = () => {
   const playlistSongElements = document.querySelectorAll('.playlist-song');
   const songToHighlight = document.getElementById(
@@ -199,6 +212,7 @@ const highlightCurrentSong = () => {
   if (songToHighlight) songToHighlight.setAttribute('aria-current', 'true');
 };
 
+// Function to render the list of songs in the playlist
 const renderSongs = array => {
   const songsHTML = array
     .map(song => {
@@ -221,6 +235,7 @@ const renderSongs = array => {
   playlistSongs.innerHTML = songsHTML;
 };
 
+// Function to set accessible text for the play button
 const setPlayButtonAccessibleText = () => {
   const song = userData?.currentSong || userData?.songs[0];
 
@@ -230,9 +245,11 @@ const setPlayButtonAccessibleText = () => {
   );
 };
 
+// Function to get the index of the current song in the playlist
 const getCurrentSongIndex = () =>
   userData?.songs.indexOf(userData?.currentSong);
 
+// Event listeners for player controls
 playButton.addEventListener('click', () => {
   if (userData?.currentSong === null) {
     playSong(userData?.songs[0].id);
@@ -242,13 +259,11 @@ playButton.addEventListener('click', () => {
 });
 
 pauseButton.addEventListener('click', pauseSong);
-
 nextButton.addEventListener('click', playNextSong);
-
 previousButton.addEventListener('click', playPreviousSong);
-
 shuffleButton.addEventListener('click', shuffle);
 
+// Event listener for handling end of song playback
 audio.addEventListener('ended', () => {
   const currentSongIndex = getCurrentSongIndex();
   const nextSongExists = userData?.songs[currentSongIndex + 1] !== undefined;
@@ -266,6 +281,7 @@ audio.addEventListener('ended', () => {
   }
 });
 
+// Sort the songs array alphabetically by title
 userData?.songs.sort((a, b) => {
   if (a.title < b.title) {
     return -1;
@@ -278,5 +294,6 @@ userData?.songs.sort((a, b) => {
   return 0;
 });
 
+// Initial rendering of the playlist and setting accessible text for play button
 renderSongs(userData?.songs);
 setPlayButtonAccessibleText();
