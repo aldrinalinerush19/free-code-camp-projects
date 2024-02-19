@@ -1,9 +1,12 @@
+// Retrieve HTML elements
 const teamName = document.getElementById('team');
 const typeOfSport = document.getElementById('sport');
 const worldCupYear = document.getElementById('year');
 const headCoach = document.getElementById('head-coach');
 const playerCards = document.getElementById('player-cards');
 const playersDropdownList = document.getElementById('players');
+
+// Data of the favorite football team
 const myFavoriteFootballTeam = {
   team: 'Argentina',
   sport: 'Football',
@@ -13,6 +16,7 @@ const myFavoriteFootballTeam = {
     coachName: 'Carlos Bilardo',
     matches: 7,
   },
+  // Array of player objects
   players: [
     {
       name: 'Sergio Almirón',
@@ -171,15 +175,20 @@ const myFavoriteFootballTeam = {
   ],
 };
 
+// Freeze the football team object to prevent modification
 Object.freeze(myFavoriteFootballTeam);
+
+// Destructure properties from the football team object
 const { sport, team, year, players } = myFavoriteFootballTeam;
 const { coachName } = myFavoriteFootballTeam.headCoach;
 
+// Update text content of HTML elements
 typeOfSport.textContent = sport;
 teamName.textContent = team;
 worldCupYear.textContent = year;
 headCoach.textContent = coachName;
 
+// Function to set player cards based on the array passed
 const setPlayerCards = (arr = players) => {
   playerCards.innerHTML += arr
     .map(
@@ -196,9 +205,11 @@ const setPlayerCards = (arr = players) => {
     .join('');
 };
 
+// Event listener for dropdown list change
 playersDropdownList.addEventListener('change', e => {
-  playerCards.innerHTML = '';
+  playerCards.innerHTML = ''; // Clear the player cards
 
+  // Switch statement to handle different dropdown options
   switch (e.target.value) {
     case 'nickname':
       setPlayerCards(players.filter(player => player.nickname !== null));
