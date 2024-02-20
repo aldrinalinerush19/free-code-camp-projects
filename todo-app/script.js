@@ -10,7 +10,7 @@ const titleInput = document.getElementById('title-input');
 const dateInput = document.getElementById('date-input');
 const descriptionInput = document.getElementById('description-input');
 
-const taskData = [];
+const taskData = JSON.parse(localStorage.getItem('data')) || [];
 let currentTask = {};
 
 const addOrUpdateTask = () => {
@@ -81,6 +81,10 @@ const reset = () => {
   taskForm.classList.toggle('hidden');
   currentTask = {};
 };
+
+if (taskData.length) {
+  updateTaskContainer();
+}
 
 openTaskFormBtn.addEventListener('click', () =>
   taskForm.classList.toggle('hidden')
